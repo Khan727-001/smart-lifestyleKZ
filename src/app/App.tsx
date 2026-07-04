@@ -67,30 +67,12 @@ const HERO = {
 //  СТАТИСТИКА (отдельный блок)
 // ─────────────────────────────────────────────────────────────
 const STATS = [
-  {
-    number: "17+",
-    label:  "лет общего практического опыта",
-    desc:   "Глубокая работа с психикой, поведением и внутренней структурой личности",
-    large:  true,
-  },
-  {
-    number: "5 000+",
-    label:  "комплексных трансформаций личности",
-    desc:   "Тысячи историй глубоких изменений и восстановления внутренней устойчивости",
-    large:  true,
-  },
-  {
-    number: "10 000+",
-    label:  "людей, улучшивших качество жизни",
-    desc:   "Больше ясности, стрессоустойчивости, осознанности и внутреннего баланса",
-    large:  true,
-  },
-  {
-    number: "10+",
-    label:  "стран по всему миру",
-    desc:   "Кыргызстан, Россия, США, Нидерланды, Англия, Италия, ОАЭ, Германия, Китай, Канада",
-    large:  false,
-  },
+  { number: "17+",    label: "лет практики",               desc: "Глубокая работа с психикой, поведением и внутренней структурой личности" },
+  { number: "5 000+", label: "трансформаций личности",      desc: "Истории глубоких изменений и восстановления внутренней устойчивости" },
+  { number: "10 000+",label: "улучшили качество жизни",    desc: "Больше ясности, осознанности и внутреннего баланса" },
+  { number: "10+",    label: "стран",                       desc: "Кыргызстан, Россия, США, Нидерланды, Англия, ОАЭ, Германия, Китай, Канада" },
+  { number: "1",      label: "семья Исламовых",             desc: "Доверие, честность и личная ответственность за результат" },
+  { number: "1",      label: "глобальная цель",             desc: "Трансформация одного человека меняет реальность вокруг него" },
 ];
 
 // ─────────────────────────────────────────────────────────────
@@ -129,7 +111,6 @@ const FORMATS = [
       "Индивидуальный маршрут и темп",
       "Полная конфиденциальность",
       "Очно в Алматы или онлайн",
-      "Домашние задания по желанию",
     ],
     formats: ["Очно", "Онлайн"],
     dark:    false,
@@ -159,7 +140,7 @@ const EXPERTS = [
     name:           "Исламов Антон Валерьевич",
     specialty:      "Психотерапевт · Клинический психолог · Аддиктолог",
     experience:     "10 лет практики",
-    bio:            "Глубинная работа с личностью, эмоциональными травмами, семейными системами и внутренними конфликтами. Специализация — реконструкция личности и системная трансформация жизни. Работа на уровне глубинных причин, а не симптомов.",
+    bio:            "Глубинная работа с личностью, эмоциональными травмами, семейными системами и внутренними конфликтами. Специализация — реконструкция личности и системная трансформация жизни. Индивидуальные консультации — только с мужчинами.",
     qualifications: [
       "Психотерапевт (немедицинский)",
       "Клинический психолог",
@@ -176,18 +157,19 @@ const EXPERTS = [
     ],
     tagline: "Каждый процесс индивидуален и адаптирован под личную архитектуру личности.",
     formats: ["Очно · Алматы", "Онлайн"],
-    tags:    ["Мужская психология", "Зависимости", "Семья и пары", "Травмы"],
+    tags:    ["Зависимости", "Семья и пары", "Травмы", "Кризисные состояния"],
     photoLeft: false,
   },
   {
     photo:          photoRinata,
     name:           "Исламова Рината Адхамовна",
-    specialty:      "Психотерапевт · Клинический психолог · Сексолог",
+    specialty:      "Психотерапевт · Клинический психолог · Женский сексолог",
     experience:     "7 лет практики",
     bio:            "Тонкая и экологичная работа с психикой, направленная на восстановление внутренней гармонии, опоры и уверенности. Индивидуальная и глубинная работа с личностью, эмоциональными травмами и внутренними конфликтами. Помогает услышать себя и раскрыть внутренний потенциал.",
     qualifications: [
       "Психотерапевт (немедицинский)",
-      "Клинический психолог · Сексолог",
+      "Клинический психолог",
+      "Женский сексолог",
       "Член международной ассоциации психологов",
     ],
     methods: [
@@ -256,9 +238,16 @@ const PRICING = [
     desc:      "Глубинная работа с ключевыми запросами и точками роста",
     kzt:       "50 000 ₸",
     usd:       "100$",
-    badge:     "",
     formats:   ["Очно", "Онлайн"],
     who:       "Антон Исламов · Рината Исламова",
+    details: [
+      "Глубокий разбор запроса с первых минут — без затяжного знакомства",
+      "Диагностика структуры личности и ключевых точек напряжения",
+      "Работа с причинами, а не симптомами",
+      "Индивидуальный маршрут под ваш запрос и темп",
+      "Полная конфиденциальность",
+      "Доступно очно в Алматы или онлайн",
+    ],
   },
   {
     title:     "Семейная / Парная сессия",
@@ -266,19 +255,15 @@ const PRICING = [
     desc:      "Работа с динамикой отношений, конфликтами и восстановлением связи",
     kzt:       "75 000 ₸",
     usd:       "150$",
-    badge:     "",
     formats:   ["Очно", "Онлайн"],
     who:       "Антон Исламов",
-  },
-  {
-    title:     "Групповая сессия",
-    duration:  "2–3 часа",
-    desc:      "Глубинная трансформация в поддерживающем групповом поле",
-    kzt:       "25 000 ₸",
-    usd:       "50$",
-    badge:     "",
-    formats:   ["Очно", "Онлайн"],
-    who:       "Антон Исламов",
+    details: [
+      "Совместная работа пары или семьи с системным терапевтом",
+      "Разбор паттернов взаимодействия и ролей",
+      "Работа с повторяющимися конфликтами и непроговорёнными ожиданиями",
+      "Инструменты для диалога между сессиями",
+      "Доступно очно в Алматы или онлайн",
+    ],
   },
 ];
 
@@ -480,7 +465,7 @@ function MechanicalSlider({
           display: "flex",
           flexWrap: "nowrap",
           transform: `translateX(-${idx * vw}px)`,
-          transition: "transform 1500ms cubic-bezier(0.76, 0, 0.24, 1)",
+          transition: "transform 2200ms cubic-bezier(0.83, 0, 0.17, 1)",
           willChange: "transform",
         }}
       >
@@ -771,14 +756,6 @@ function Hero() {
           <a href={WA()} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-3 bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[16px] tracking-[0.15em] px-6 py-4 hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors">
             Записаться на консультацию <ArrowRight size={14}/>
           </a>
-          <div className="flex gap-10 mt-8 pt-8 border-t border-[#E8DDD4]">
-            {HERO.stats.map(s=>(
-              <div key={s.number}>
-                <p className="font-['Cormorant_Garamond'] text-3xl text-[#5C5248]">{s.number}</p>
-                <p className="font-['Bebas_Neue'] text-[13px] tracking-[0.15em] text-[#8A7B6C] mt-1">{s.label}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
 
@@ -801,14 +778,6 @@ function Hero() {
               </a>
               <a href="#problems" className="font-['DM_Sans'] text-[12px] tracking-[0.12em] uppercase text-[#5C5248]/40 hover:text-[#5C5248] transition-colors">О методе ↓</a>
             </div>
-          </div>
-          <div className="flex items-end gap-12 pb-2 mt-16">
-            {HERO.stats.map(s=>(
-              <div key={s.number}>
-                <p className="font-['Cormorant_Garamond'] text-5xl font-normal text-[#5C5248]">{s.number}</p>
-                <p className="font-['Bebas_Neue'] text-[13px] tracking-[0.18em] text-[#8A7B6C] mt-2">{s.label}</p>
-              </div>
-            ))}
           </div>
         </div>
       </div>
@@ -841,50 +810,39 @@ function Statement() {
 // ══════════════════════════════════════════════════════════════
 //  STATS
 // ══════════════════════════════════════════════════════════════
+function StatsToProblemsTransition() {
+  return (
+    <div className="bg-[#5C5248] py-10 px-6 lg:px-12">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <p className="font-['Cormorant_Garamond'] italic text-[#F3EDE6] leading-snug" style={{ fontSize: "clamp(20px, 2.5vw, 32px)" }}>
+          Работаем с причинами — не с симптомами
+        </p>
+        <a href={WA()} target="_blank" rel="noreferrer"
+          className="inline-flex items-center gap-2 border border-[#C9A882]/40 text-[#C9A882] font-['Bebas_Neue'] text-[14px] tracking-[0.18em] px-6 py-3 hover:bg-[#C9A882] hover:text-[#5C5248] transition-colors whitespace-nowrap self-start lg:self-auto">
+          Записаться <ArrowRight size={13}/>
+        </a>
+      </div>
+    </div>
+  );
+}
+
 function Stats() {
   return (
-    <section className="bg-[#F3EDE6] py-20 lg:py-28 border-b border-[#E8DDD4]">
+    <section className="bg-[#F3EDE6] py-10 lg:py-16 border-b border-[#E8DDD4]">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <FadeIn className="mb-14">
-          <Label>В цифрах</Label>
-          <div className="relative">
-            <GhostNum n="∞" />
-            <h2 className="font-['Cormorant_Garamond'] font-normal text-[#5C5248] leading-[1.05] relative" style={{ fontSize:"clamp(28px,3.5vw,48px)" }}>
-              Результаты, подтверждённые<br/><em>годами практики</em>
-            </h2>
-          </div>
-        </FadeIn>
-
-        {/* Три большие цифры */}
-        <div className="grid lg:grid-cols-3 gap-px bg-[#E8DDD4] mb-px">
-          {STATS.filter(s => s.large).map((s, i) => (
-            <FadeIn key={s.label} delay={i * 100} className="bg-[#F3EDE6] p-8 lg:p-12">
-              <p
-                className="font-['Cormorant_Garamond'] font-normal text-[#5C5248] leading-none mb-3"
-                style={{ fontSize: "clamp(52px, 7vw, 96px)" }}
-              >
+        {/* Все 6 цифр в одной сетке — компактно */}
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-px bg-[#E8DDD4]">
+          {STATS.map((s, i) => (
+            <FadeIn key={s.label} delay={i * 60} className={`p-5 lg:p-8 ${i >= 3 ? "bg-[#EBE0D5]" : "bg-[#F3EDE6]"}`}>
+              <p className={`font-['Cormorant_Garamond'] font-normal leading-none mb-1 ${i >= 3 ? "italic" : ""}`}
+                style={{ fontSize: "clamp(32px, 5vw, 64px)", color: "#5C5248" }}>
                 {s.number}
               </p>
-              <p className="font-['Bebas_Neue'] text-[14px] tracking-[0.18em] text-[#8A7B6C] mb-3 uppercase">{s.label}</p>
-              <p className="font-['DM_Sans'] text-[13px] text-[#5C5248]/50 leading-relaxed">{s.desc}</p>
+              <p className="font-['Bebas_Neue'] text-[12px] lg:text-[13px] tracking-[0.15em] text-[#8A7B6C] mb-1 uppercase leading-snug">{s.label}</p>
+              <p className="font-['DM_Sans'] text-[11px] text-[#5C5248]/45 leading-relaxed hidden lg:block">{s.desc}</p>
             </FadeIn>
           ))}
         </div>
-
-        {/* Одиночный блок — стран */}
-        <FadeIn className="bg-[#EBE0D5] p-8 lg:p-10">
-          {STATS.filter(s => !s.large).map(s => (
-            <div key={s.label} className="flex flex-col lg:flex-row lg:items-baseline gap-4 lg:gap-10">
-              <p className="font-['Cormorant_Garamond'] italic font-normal text-[#5C5248] leading-none shrink-0" style={{ fontSize: "clamp(40px, 5vw, 72px)" }}>
-                {s.number}
-              </p>
-              <div>
-                <p className="font-['Bebas_Neue'] text-[13px] tracking-[0.16em] text-[#8A7B6C] mb-2 uppercase">{s.label}</p>
-                <p className="font-['DM_Sans'] text-[12px] text-[#5C5248]/50 leading-relaxed">{s.desc}</p>
-              </div>
-            </div>
-          ))}
-        </FadeIn>
       </div>
     </section>
   );
@@ -908,7 +866,6 @@ function Problems() {
   );
   const heading = (
     <>
-      <Label>Запросы</Label>
       <div className="relative">
         <GhostNum n="01" />
         <h2 className="font-['Cormorant_Garamond'] font-normal text-[#5C5248] leading-[1.1] relative" style={{ fontSize:"clamp(32px,4vw,52px)" }}>
@@ -979,7 +936,110 @@ function Formats() {
 // ══════════════════════════════════════════════════════════════
 //  EXPERTS — без слайдера, стекированные
 // ══════════════════════════════════════════════════════════════
+// Попап специалиста — полный экран на мобиле, карточка на десктопе
+function ExpertModal({ expert, onClose }: { expert: typeof EXPERTS[0]; onClose: () => void }) {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-[80]" onClick={onClose}>
+      <div className="absolute inset-0 bg-[#5C5248]/50 backdrop-blur-sm lg:block hidden" />
+
+      {/* Мобиль — полный экран, десктоп — центрированная карточка */}
+      <div
+        className="absolute inset-0 lg:inset-auto lg:relative lg:flex lg:items-center lg:justify-center lg:min-h-screen"
+        onClick={onClose}
+      >
+        <div
+          className="bg-[#F3EDE6] w-full h-full lg:h-auto lg:max-w-2xl lg:max-h-[88vh] overflow-y-auto relative"
+          onClick={e => e.stopPropagation()}
+        >
+          {/* Кнопка закрытия — только на десктопе абсолютная, на мобиле внизу */}
+          <button
+            onClick={onClose}
+            className="hidden lg:flex absolute top-4 right-4 z-30 w-9 h-9 items-center justify-center bg-[#F3EDE6]/90 backdrop-blur-sm text-[#5C5248] hover:text-[#8A7B6C] transition-colors"
+          >
+            <X size={18}/>
+          </button>
+
+          {/* Фото — на десктопе фиксированная высота, на мобиле натуральная */}
+          <div className="w-full lg:h-64 overflow-hidden">
+            <ImageWithFallback
+              src={expert.photo}
+              alt={expert.name}
+              className="w-full h-full object-cover object-top"
+            />
+          </div>
+
+          {/* Контент — на мобиле добавляем отступ снизу под фиксированную панель */}
+          <div className="p-6 lg:p-10 pb-28 lg:pb-10">
+            <p className="font-['Bebas_Neue'] text-[12px] tracking-[0.2em] text-[#8A7B6C] mb-1">{expert.experience}</p>
+            <h3 className="font-['Cormorant_Garamond'] font-normal text-[#5C5248] leading-tight mb-1" style={{ fontSize: "clamp(26px,3vw,40px)" }}>{expert.name}</h3>
+            <p className="font-['Cormorant_Garamond'] italic text-[15px] text-[#8A7B6C] mb-5">{expert.specialty}</p>
+            <div className="w-8 h-px bg-[#C9A882] mb-5"/>
+            <p className="font-['DM_Sans'] text-[13px] text-[#5C5248]/65 leading-[1.8] mb-7">{expert.bio}</p>
+
+            <div className="mb-6">
+              <p className="font-['Bebas_Neue'] text-[12px] tracking-[0.18em] text-[#5C5248]/40 mb-3">Квалификация</p>
+              <ul className="space-y-1.5">
+                {expert.qualifications.map(q=>(
+                  <li key={q} className="flex items-start gap-2 font-['DM_Sans'] text-[12px] text-[#5C5248]/65">
+                    <span className="w-3 h-px bg-[#C9A882] mt-2 shrink-0"/>{q}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="mb-6">
+              <p className="font-['Bebas_Neue'] text-[12px] tracking-[0.18em] text-[#5C5248]/40 mb-3">Методы работы</p>
+              <ul className="space-y-2">
+                {expert.methods.map(m=>(
+                  <li key={m} className="flex items-start gap-2 font-['DM_Sans'] text-[12px] text-[#5C5248]/65 leading-relaxed">
+                    <span className="text-[#C9A882] mt-0.5 shrink-0">◈</span>{m}
+                  </li>
+                ))}
+              </ul>
+              {expert.tagline && (
+                <p className="font-['Cormorant_Garamond'] italic text-[14px] text-[#8A7B6C] mt-4 pt-4 border-t border-[#C9A882]/20">{expert.tagline}</p>
+              )}
+            </div>
+
+            <div className="flex gap-2 flex-wrap mb-7">
+              {expert.formats.map(f=>(
+                <span key={f} className="font-['Bebas_Neue'] text-[12px] tracking-[0.12em] text-[#5C5248] bg-[#E8DDD4] px-3 py-1.5">{f}</span>
+              ))}
+            </div>
+
+            {/* Кнопка записаться — только на десктопе внутри контента */}
+            <a href={WA(`Здравствуйте! Хочу записаться к ${expert.name}.`)} target="_blank" rel="noreferrer"
+              className="hidden lg:flex items-center justify-center gap-3 bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[15px] tracking-[0.18em] py-4 w-full hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors">
+              Записаться <ArrowRight size={13}/>
+            </a>
+          </div>
+
+          {/* Фиксированная панель снизу — только мобиль */}
+          <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#F3EDE6] border-t border-[#E8DDD4] p-4 flex gap-3">
+            <button
+              onClick={onClose}
+              className="w-12 h-12 flex items-center justify-center border border-[#5C5248]/20 text-[#5C5248] shrink-0 hover:bg-[#E8DDD4] transition-colors"
+            >
+              <X size={18}/>
+            </button>
+            <a href={WA(`Здравствуйте! Хочу записаться к ${expert.name}.`)} target="_blank" rel="noreferrer"
+              className="flex-1 flex items-center justify-center gap-3 bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[15px] tracking-[0.18em] hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors">
+              Записаться <ArrowRight size={13}/>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Experts() {
+  const [active, setActive] = useState<number | null>(null);
   return (
     <section id="experts" className="bg-[#F3EDE6] py-20 lg:py-28">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
@@ -994,68 +1054,50 @@ function Experts() {
         {EXPERTS.map((e, i) => (
           <FadeIn key={e.name} delay={i * 100} className="border-t border-[#E8DDD4]">
             <div className="grid lg:grid-cols-2 gap-0">
-              {/* Фото */}
-              <div className={`overflow-hidden order-1 ${e.photoLeft ? "lg:order-1" : "lg:order-2"}`}>
-                <ImageWithFallback src={e.photo} alt={`${e.name} — психотерапевт S.M.A.R.T. Lifestyle Алматы`} className="w-full h-[360px] lg:h-full object-cover object-top lg:min-h-[520px]" />
+              {/* Фото — кликабельное */}
+              <div
+                className={`overflow-hidden order-1 relative cursor-pointer group ${e.photoLeft ? "lg:order-1" : "lg:order-2"}`}
+                onClick={() => setActive(i)}
+              >
+                <ImageWithFallback src={e.photo} alt={`${e.name} — психотерапевт S.M.A.R.T. Lifestyle Алматы`} className="w-full h-[320px] lg:h-full object-cover object-top lg:min-h-[460px] transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-[#5C5248]/0 group-hover:bg-[#5C5248]/20 transition-all duration-500 flex items-center justify-center">
+                  <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 font-['Bebas_Neue'] text-[13px] tracking-[0.2em] text-[#F3EDE6] border border-[#F3EDE6]/60 px-5 py-2.5">
+                    Подробнее
+                  </span>
+                </div>
               </div>
 
-              {/* Текст */}
-              <div className={`px-0 py-10 lg:py-16 flex flex-col justify-start order-2 ${e.photoLeft ? "lg:order-2 lg:pl-14 lg:border-l" : "lg:order-1 lg:pr-14 lg:border-r"} border-[#E8DDD4]`}>
-                <div>
-                  <p className="font-['Bebas_Neue'] text-[13px] tracking-[0.2em] text-[#8A7B6C] mb-1">{e.experience}</p>
-                  <h3 className="font-['Cormorant_Garamond'] font-normal text-[#5C5248] leading-[1.0] mb-2" style={{ fontSize:"clamp(28px,2.8vw,44px)" }}>{e.name}</h3>
-                  <p className="font-['Cormorant_Garamond'] italic text-[18px] text-[#8A7B6C] mb-6">{e.specialty}</p>
-                  <div className="w-8 h-px bg-[#C9A882] mb-6"/>
-                  <p className="font-['DM_Sans'] text-[13px] text-[#5C5248]/60 leading-[1.8] mb-8">{e.bio}</p>
+              {/* Краткий текст */}
+              <div className={`px-0 py-8 lg:py-14 flex flex-col justify-center order-2 ${e.photoLeft ? "lg:order-2 lg:pl-14 lg:border-l" : "lg:order-1 lg:pr-14 lg:border-r"} border-[#E8DDD4]`}>
+                <p className="font-['Bebas_Neue'] text-[13px] tracking-[0.2em] text-[#8A7B6C] mb-1">{e.experience}</p>
+                <h3 className="font-['Cormorant_Garamond'] font-normal text-[#5C5248] leading-[1.0] mb-2" style={{ fontSize:"clamp(26px,2.8vw,42px)" }}>{e.name}</h3>
+                <p className="font-['Cormorant_Garamond'] italic text-[17px] text-[#8A7B6C] mb-5">{e.specialty}</p>
+                <div className="w-8 h-px bg-[#C9A882] mb-5"/>
+                <p className="font-['DM_Sans'] text-[13px] text-[#5C5248]/60 leading-[1.8] mb-6">{e.bio}</p>
+                <div className="flex flex-wrap gap-2 mb-7">
+                  {e.tags.map(t=>(
+                    <span key={t} className="font-['DM_Sans'] text-[11px] tracking-[0.1em] uppercase text-[#8A7B6C] border border-[#C9A882]/30 px-3 py-1.5">{t}</span>
+                  ))}
                 </div>
-
-                {/* Квалификация */}
-                <div className="mb-7">
-                  <p className="font-['Bebas_Neue'] text-[13px] tracking-[0.18em] text-[#5C5248]/40 mb-3">Квалификация</p>
-                  <ul className="space-y-2">
-                    {e.qualifications.map(q=>(
-                      <li key={q} className="flex items-start gap-2 font-['DM_Sans'] text-[12px] text-[#5C5248]/70">
-                        <span className="w-3 h-px bg-[#C9A882] mt-2 shrink-0"/>{q}
-                      </li>
-                    ))}
-                  </ul>
+                <div className="flex gap-3 flex-wrap">
+                  <button
+                    onClick={() => setActive(i)}
+                    className="inline-flex items-center gap-2 border border-[#5C5248]/30 text-[#5C5248] font-['Bebas_Neue'] text-[14px] tracking-[0.15em] px-6 py-3.5 hover:bg-[#5C5248] hover:text-[#F3EDE6] transition-colors"
+                  >
+                    О специалисте
+                  </button>
+                  <a href={WA(`Здравствуйте! Хочу записаться к ${e.name}.`)} target="_blank" rel="noreferrer"
+                    className="inline-flex items-center gap-2 bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[14px] tracking-[0.15em] px-6 py-3.5 hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors">
+                    Записаться <ArrowRight size={12}/>
+                  </a>
                 </div>
-
-                {/* Методы */}
-                <div className="mb-7">
-                  <p className="font-['Bebas_Neue'] text-[13px] tracking-[0.18em] text-[#5C5248]/40 mb-3">Методы работы</p>
-                  <ul className="space-y-2">
-                    {e.methods.map(m=>(
-                      <li key={m} className="flex items-start gap-2 font-['DM_Sans'] text-[12px] text-[#5C5248]/65 leading-relaxed">
-                        <span className="text-[#C9A882] mt-1 shrink-0">◈</span>{m}
-                      </li>
-                    ))}
-                  </ul>
-                  {e.tagline && (
-                    <p className="font-['Cormorant_Garamond'] italic text-[14px] text-[#8A7B6C] mt-4 border-t border-[#C9A882]/20 pt-4">
-                      {e.tagline}
-                    </p>
-                  )}
-                </div>
-
-                {/* Форматы */}
-                <div className="mb-8">
-                  <p className="font-['Bebas_Neue'] text-[13px] tracking-[0.18em] text-[#5C5248]/40 mb-3">Форматы</p>
-                  <div className="flex gap-2">
-                    {e.formats.map(f=>(
-                      <span key={f} className="font-['Bebas_Neue'] text-[13px] tracking-[0.15em] text-[#5C5248] bg-[#E8DDD4] px-3 py-1.5">{f}</span>
-                    ))}
-                  </div>
-                </div>
-
-                <a href={WA(`Здравствуйте! Хочу записаться к ${e.name}.`)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[15px] tracking-[0.15em] px-7 py-4 hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors self-start">
-                  Записаться <ArrowRight size={12}/>
-                </a>
               </div>
             </div>
           </FadeIn>
         ))}
       </div>
+
+      {active !== null && <ExpertModal expert={EXPERTS[active]} onClose={() => setActive(null)} />}
     </section>
   );
 }
@@ -1110,7 +1152,59 @@ function Reviews() {
 // ══════════════════════════════════════════════════════════════
 //  PRICING
 // ══════════════════════════════════════════════════════════════
+function PricingModal({ item, onClose }: { item: typeof PRICING[0]; onClose: () => void }) {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+  return (
+    <div className="fixed inset-0 z-[80] flex items-end lg:items-center justify-center p-4 lg:p-8"
+      onClick={onClose}>
+      <div className="absolute inset-0 bg-[#5C5248]/40 backdrop-blur-sm" />
+      <div className="relative bg-[#F3EDE6] w-full max-w-lg lg:max-w-xl p-8 lg:p-12 z-10"
+        onClick={e => e.stopPropagation()}>
+        <button onClick={onClose} className="absolute top-5 right-5 text-[#5C5248]/40 hover:text-[#5C5248] transition-colors">
+          <X size={20}/>
+        </button>
+
+        <Label>{item.duration}</Label>
+        <h3 className="font-['Cormorant_Garamond'] font-normal text-[#5C5248] leading-tight mb-2" style={{ fontSize: "clamp(24px,3vw,36px)" }}>
+          {item.title}
+        </h3>
+        <p className="font-['Cormorant_Garamond'] italic text-[16px] text-[#8A7B6C] mb-6">{item.who}</p>
+        <div className="w-8 h-px bg-[#C9A882] mb-6"/>
+
+        <ul className="space-y-3 mb-8">
+          {item.details.map((d, i) => (
+            <li key={i} className="flex items-start gap-3 font-['DM_Sans'] text-[13px] text-[#5C5248]/70 leading-relaxed">
+              <span className="text-[#C9A882] shrink-0 mt-0.5">◈</span>{d}
+            </li>
+          ))}
+        </ul>
+
+        <div className="flex items-center justify-between mb-6 pt-6 border-t border-[#E8DDD4]">
+          <div>
+            <p className="font-['Cormorant_Garamond'] text-[28px] font-normal text-[#5C5248]">{item.kzt}</p>
+            <p className="font-['DM_Sans'] text-[12px] text-[#8A7B6C]/60">{item.usd}</p>
+          </div>
+          <div className="flex gap-2">
+            {item.formats.map(f => (
+              <span key={f} className="font-['Bebas_Neue'] text-[12px] tracking-[0.12em] text-[#8A7B6C] border border-[#C9A882]/30 px-3 py-1.5">{f}</span>
+            ))}
+          </div>
+        </div>
+
+        <a href={WA(`Здравствуйте! Хочу записаться: ${item.title}.`)} target="_blank" rel="noreferrer"
+          className="flex items-center justify-center gap-3 bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[15px] tracking-[0.18em] py-4 w-full hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors">
+          Записаться в WhatsApp <ArrowRight size={14}/>
+        </a>
+      </div>
+    </div>
+  );
+}
+
 function Pricing() {
+  const [active, setActive] = useState<number | null>(null);
   return (
     <section id="pricing" className="bg-[#F3EDE6] py-20 lg:py-28">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
@@ -1124,37 +1218,35 @@ function Pricing() {
         <div>
           {PRICING.map((p,i)=>(
             <FadeIn key={i} delay={i * 80}>
-              <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr_auto_auto_auto] gap-3 lg:gap-10 border-t border-[#E8DDD4] py-6 lg:items-center">
+              <button
+                onClick={() => setActive(i)}
+                className="w-full text-left grid grid-cols-1 lg:grid-cols-[auto_1fr_auto_auto_auto] gap-3 lg:gap-10 border-t border-[#E8DDD4] py-6 lg:items-center group hover:bg-[#F3EDE6]/60 transition-colors cursor-pointer"
+              >
                 <span className="font-['DM_Sans'] text-[11px] text-[#8A7B6C]/40 w-6 hidden lg:block">{String(i+1).padStart(2,"0")}</span>
                 <div>
                   <div className="flex flex-wrap items-center gap-3 mb-1">
-                    <h3 className="font-['Cormorant_Garamond'] text-[22px] font-normal text-[#5C5248]">{p.title}</h3>
-                    {p.badge && <span className="font-['Bebas_Neue'] text-[12px] tracking-[0.12em] text-[#5C5248] bg-[#C9A882] px-2.5 py-1">{p.badge}</span>}
+                    <h3 className="font-['Cormorant_Garamond'] text-[22px] font-normal text-[#5C5248] group-hover:text-[#8A7B6C] transition-colors">{p.title}</h3>
                   </div>
                   <p className="font-['DM_Sans'] text-[12px] text-[#5C5248]/50 mb-2">{p.desc}</p>
-                  <p className="font-['DM_Sans'] text-[11px] text-[#8A7B6C]/70 italic mb-2">{p.who}</p>
-                  <div className="flex gap-2">
-                    {p.formats.map(f=>(
-                      <span key={f} className="font-['Bebas_Neue'] text-[11px] tracking-[0.12em] text-[#8A7B6C] border border-[#C9A882]/30 px-2 py-1">{f}</span>
-                    ))}
-                  </div>
+                  <p className="font-['DM_Sans'] text-[11px] text-[#8A7B6C]/60 italic">{p.who}</p>
                 </div>
                 <p className="font-['DM_Sans'] text-[11px] tracking-[0.1em] uppercase text-[#8A7B6C]">{p.duration}</p>
-                {/* Цены */}
-                <div className="text-right lg:text-left">
+                <div>
                   <p className="font-['Cormorant_Garamond'] text-[22px] font-normal text-[#5C5248]">{p.kzt}</p>
-                  <p className="font-['DM_Sans'] text-[11px] text-[#8A7B6C]/60 mt-0.5">{p.usd}</p>
+                  <p className="font-['DM_Sans'] text-[11px] text-[#8A7B6C]/60">{p.usd}</p>
                 </div>
-                <a href={WA(`Здравствуйте! Хочу записаться: ${p.title}.`)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[13px] tracking-[0.15em] px-5 py-3 hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors whitespace-nowrap">
-                  Записаться <ArrowRight size={11}/>
-                </a>
-              </div>
+                <span className="font-['Bebas_Neue'] text-[12px] tracking-[0.15em] text-[#8A7B6C] border border-[#C9A882]/40 px-4 py-2 group-hover:bg-[#C9A882] group-hover:text-[#5C5248] transition-colors whitespace-nowrap">
+                  Подробнее
+                </span>
+              </button>
             </FadeIn>
           ))}
           <div className="border-t border-[#E8DDD4]"/>
         </div>
-        <p className="font-['DM_Sans'] text-[12px] text-[#5C5248]/40 mt-6">* Цены указаны ориентировочно. Точная стоимость уточняется при записи.</p>
+        <p className="font-['DM_Sans'] text-[12px] text-[#5C5248]/40 mt-6">* Нажмите на строку, чтобы узнать подробнее. Точная стоимость уточняется при записи.</p>
       </div>
+
+      {active !== null && <PricingModal item={PRICING[active]} onClose={() => setActive(null)} />}
     </section>
   );
 }
@@ -1409,6 +1501,7 @@ export default function App() {
         <Hero/>
         <Statement/>
         <Stats/>
+        <StatsToProblemsTransition/>
         <Problems/>
         <Formats/>
         <Experts/>
