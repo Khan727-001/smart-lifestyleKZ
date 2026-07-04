@@ -425,7 +425,7 @@ function useSlider(total: number) {
   return { idx, prev, next };
 }
 
-// Механический слайдер — полная ширина вьюпорта, выходит за рамки сайта
+// Механический слайдер — точный пиксельный сдвиг через ref
 function MechanicalSlider({
   idx,
   onNext,
@@ -437,26 +437,59 @@ function MechanicalSlider({
   onPrev: () => void;
   children: React.ReactNode[];
 }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [slideW, setSlideW] = useState(0);
   const startX = useRef(0);
+  const startY = useRef(0);
+
+  useEffect(() => {
+    const measure = () => setSlideW(window.innerWidth);
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
+  const vw = slideW || window.innerWidth;
+
   return (
+    // Выламываемся из контейнера на всю ширину экрана
     <div
-      style={{ width: "100vw", marginLeft: "calc(-50vw + 50%)", overflow: "hidden" }}
-      onTouchStart={e => { startX.current = e.touches[0].clientX; }}
+      ref={containerRef}
+      style={{
+        overflow: "hidden",
+        width: "100vw",
+        position: "relative",
+        left: "50%",
+        transform: "translateX(-50%)",
+        touchAction: "pan-y",
+      }}
+      onTouchStart={e => {
+        startX.current = e.touches[0].clientX;
+        startY.current = e.touches[0].clientY;
+      }}
       onTouchEnd={e => {
-        const d = startX.current - e.changedTouches[0].clientX;
-        if (Math.abs(d) > 44) d > 0 ? onNext() : onPrev();
+        const dx = startX.current - e.changedTouches[0].clientX;
+        const dy = startY.current - e.changedTouches[0].clientY;
+        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 44) {
+          dx > 0 ? onNext() : onPrev();
+        }
       }}
     >
       <div
-        className="flex"
         style={{
-          transform: `translateX(-${idx * 100}%)`,
+          display: "flex",
+          flexWrap: "nowrap",
+          transform: `translateX(-${idx * vw}px)`,
           transition: "transform 1500ms cubic-bezier(0.76, 0, 0.24, 1)",
           willChange: "transform",
         }}
       >
         {children.map((child, i) => (
-          <div key={i} style={{ minWidth: "100vw", flexShrink: 0 }}>
+          <div
+            key={i}
+            style={{ width: `${vw}px`, minWidth: `${vw}px`, flexShrink: 0, boxSizing: "border-box" }}
+          >
+            {/* Внутренний контент с паддингами контейнера */}
             <div className="max-w-7xl mx-auto px-6 lg:px-12">
               {child}
             </div>
@@ -467,14 +500,21 @@ function MechanicalSlider({
   );
 }
 
-// Свайп
+// Свайп — только горизонтальный, не блокирует вертикальный скролл
 function useSwipe(onNext: () => void, onPrev: () => void) {
   const x0 = useRef(0);
+  const y0 = useRef(0);
   return {
-    onTouchStart: (e: React.TouchEvent) => { x0.current = e.touches[0].clientX; },
-    onTouchEnd:   (e: React.TouchEvent) => {
-      const d = x0.current - e.changedTouches[0].clientX;
-      if (Math.abs(d) > 44) d > 0 ? onNext() : onPrev();
+    onTouchStart: (e: React.TouchEvent) => {
+      x0.current = e.touches[0].clientX;
+      y0.current = e.touches[0].clientY;
+    },
+    onTouchEnd: (e: React.TouchEvent) => {
+      const dx = x0.current - e.changedTouches[0].clientX;
+      const dy = y0.current - e.changedTouches[0].clientY;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 44) {
+        dx > 0 ? onNext() : onPrev();
+      }
     },
   };
 }
@@ -648,7 +688,14 @@ function Nav() {
     window.addEventListener("scroll", fn);
     return () => window.removeEventListener("scroll", fn);
   }, []);
-  useEffect(() => { document.body.style.overflow = open ? "hidden" : ""; return () => { document.body.style.overflow = ""; }; }, [open]);
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    document.body.style.touchAction = open ? "none" : "";
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.touchAction = "";
+    };
+  }, [open]);
 
   const links = [["Запросы","#problems"],["Специалисты","#experts"],["Форматы","#formats"],["Отзывы","#reviews"],["Метод","#method"],["FAQ","#faq"],["Контакты","#contacts"]];
 
@@ -1020,7 +1067,7 @@ function Reviews() {
   const { idx, prev, next } = useSlider(REVIEWS.length);
   const swipe = useSwipe(next, prev);
   return (
-    <section id="reviews" className="bg-[#E8DDD4] py-20 lg:py-28">
+    <section id="reviews" className="bg-[#E8DDD4] py-20 lg:py-28 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <FadeIn className="mb-12 lg:mb-16 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
           <div>
@@ -1039,11 +1086,11 @@ function Reviews() {
 
         <MechanicalSlider idx={idx} onNext={next} onPrev={prev}>
           {REVIEWS.map((r,i)=>(
-            <div key={i} className="bg-[#F3EDE6] p-8 lg:p-14 border-l-4 border-[#C9A882]">
-              <div className="font-['Cormorant_Garamond'] text-[#C9A882] text-7xl leading-none mb-6 select-none">"</div>
-              <p className="font-['Cormorant_Garamond'] italic font-normal text-[#5C5248] leading-relaxed mb-8" style={{ fontSize:"clamp(18px,2.2vw,26px)" }}>{r.text}</p>
+            <div key={i} className="bg-[#F3EDE6] p-6 lg:p-14 border-l-4 border-[#C9A882]">
+              <div className="font-['Cormorant_Garamond'] text-[#C9A882] text-5xl lg:text-7xl leading-none mb-4 lg:mb-6 select-none">"</div>
+              <p className="font-['Cormorant_Garamond'] italic font-normal text-[#5C5248] leading-relaxed mb-6 lg:mb-8" style={{ fontSize:"clamp(16px,2.2vw,26px)" }}>{r.text}</p>
               <div>
-                <p className="font-['Bebas_Neue'] text-[15px] tracking-[0.2em] text-[#5C5248]">{r.name}</p>
+                <p className="font-['Bebas_Neue'] text-[14px] tracking-[0.2em] text-[#5C5248]">{r.name}</p>
                 <p className="font-['DM_Sans'] text-[11px] tracking-[0.1em] uppercase text-[#8A7B6C] mt-1">{r.specialist}</p>
               </div>
             </div>
@@ -1151,20 +1198,18 @@ function Method() {
         {/* Механический слайдер */}
         <MechanicalSlider idx={idx} onNext={next} onPrev={prev}>
           {SMART_STEPS.map((s,i)=>(
-            <div key={i} className="grid lg:grid-cols-2 gap-10 lg:gap-20 items-start">
-              <div>
-                <div className="flex items-center gap-5 mb-8">
-                  <div className="w-20 h-20 bg-[#5C5248] flex items-center justify-center shrink-0">
-                    <span className="font-['Cormorant_Garamond'] text-4xl font-normal text-[#C9A882]">{s.letter}</span>
-                  </div>
-                  <div>
-                    <p className="font-['Bebas_Neue'] text-[13px] tracking-[0.18em] text-[#8A7B6C] mb-1">Шаг 0{i+1} из 5 · {s.abbr}</p>
-                    <h3 className="font-['Cormorant_Garamond'] text-[26px] font-normal text-[#5C5248]">{s.ru}</h3>
-                  </div>
+            <div key={i} className="flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-20 items-start bg-[#E8DDD4] relative z-10">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 lg:w-20 lg:h-20 bg-[#5C5248] flex items-center justify-center shrink-0">
+                  <span className="font-['Cormorant_Garamond'] text-3xl lg:text-4xl font-normal text-[#C9A882]">{s.letter}</span>
+                </div>
+                <div>
+                  <p className="font-['Bebas_Neue'] text-[12px] tracking-[0.18em] text-[#8A7B6C] mb-1">Шаг 0{i+1} из 5 · {s.abbr}</p>
+                  <h3 className="font-['Cormorant_Garamond'] text-[22px] lg:text-[26px] font-normal text-[#5C5248]">{s.ru}</h3>
                 </div>
               </div>
               <div>
-                <p className="font-['DM_Sans'] text-[15px] text-[#5C5248]/70 leading-[1.85]">{s.desc}</p>
+                <p className="font-['DM_Sans'] text-[14px] lg:text-[15px] text-[#5C5248]/70 leading-[1.75]">{s.desc}</p>
               </div>
             </div>
           ))}
