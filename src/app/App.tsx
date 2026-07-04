@@ -964,12 +964,12 @@ function ExpertModal({ expert, onClose }: { expert: typeof EXPERTS[0]; onClose: 
             <X size={18}/>
           </button>
 
-          {/* Фото — на десктопе фиксированная высота, на мобиле натуральная */}
-          <div className="w-full lg:h-64 overflow-hidden">
+          {/* Фото — только на мобиле */}
+          <div className="w-full lg:hidden overflow-hidden">
             <ImageWithFallback
               src={expert.photo}
               alt={expert.name}
-              className="w-full h-full object-cover object-top"
+              className="w-full object-cover object-top"
             />
           </div>
 
