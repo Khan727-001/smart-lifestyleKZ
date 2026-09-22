@@ -8,10 +8,15 @@ declare global {
 }
 
 const DEFAULT_GA4_ID = "G-KR48SRW021";
+const DEFAULT_GOOGLE_TAG_ID = "GT-W62J4459";
 
 const GA4_ID =
   (import.meta.env.VITE_GA4_MEASUREMENT_ID as string | undefined)?.trim() ||
   DEFAULT_GA4_ID;
+
+const GOOGLE_TAG_ID =
+  (import.meta.env.VITE_GOOGLE_TAG_ID as string | undefined)?.trim() ||
+  DEFAULT_GOOGLE_TAG_ID;
 
 export function initGA4() {
   if (!GA4_ID || typeof window === "undefined") return;
@@ -38,11 +43,11 @@ export function initGA4() {
 
   window.gtag("config", GA4_ID, configParams);
 
-  const selector = `script[src*="googletagmanager.com/gtag/js?id=${GA4_ID}"]`;
+  const selector = `script[src*="googletagmanager.com/gtag/js?id=${GOOGLE_TAG_ID}"]`;
   if (!document.querySelector(selector)) {
     const script = document.createElement("script");
     script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GA4_ID)}`;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GOOGLE_TAG_ID)}`;
 
     if (import.meta.env.DEV) {
       script.onload = () => console.info("[GA4] gtag.js loaded");
