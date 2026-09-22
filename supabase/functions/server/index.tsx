@@ -1,6 +1,6 @@
-import { Hono } from "npm:hono";
-import { cors } from "npm:hono/cors";
-import { logger } from "npm:hono/logger";
+import { Hono } from "npm:hono@4.9.8";
+import { cors } from "npm:hono@4.9.8/cors";
+import { logger } from "npm:hono@4.9.8/logger";
 import { createClient } from "jsr:@supabase/supabase-js@2.49.8";
 
 const app = new Hono();
