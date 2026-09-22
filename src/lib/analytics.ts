@@ -43,6 +43,12 @@ export function initGA4() {
     const script = document.createElement("script");
     script.async = true;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GA4_ID)}`;
+
+    if (import.meta.env.DEV) {
+      script.onload = () => console.info("[GA4] gtag.js loaded");
+      script.onerror = () => console.error("[GA4] gtag.js failed to load");
+    }
+
     document.head.appendChild(script);
   }
 
