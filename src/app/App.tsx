@@ -1714,11 +1714,6 @@ function BookingModal() {
           Мы свяжемся с вами и уточним удобное время.
         </p>
 
-        <div className="bg-[#E8DDD4]/70 border border-[#C9A882]/25 px-4 py-3.5 mb-7">
-          <p className="font-['Bebas_Neue'] text-[11px] tracking-[0.16em] uppercase text-[#8A7B6C] mb-1">Вы выбрали</p>
-          <p className="font-['DM_Sans'] text-[13px] text-[#5C5248] leading-relaxed">{leadSource}</p>
-        </div>
-
         {sent ? (
           <div className="py-8">
             <Check size={28} className="text-[#C9A882] mb-4"/>
