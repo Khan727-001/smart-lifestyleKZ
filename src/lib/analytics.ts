@@ -22,14 +22,15 @@ export function initGA4() {
   };
 
   window.gtag("js", new Date());
-  const isLocalDebug =
-    window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1";
-
-  window.gtag("config", GA4_ID, {
+  const configParams: Record<string, unknown> = {
     send_page_view: true,
-    debug_mode: isLocalDebug,
-  });
+  };
+
+  if (import.meta.env.DEV) {
+    configParams.debug_mode = true;
+  }
+
+  window.gtag("config", GA4_ID, configParams);
 
   const script = document.createElement("script");
   script.async = true;
@@ -39,15 +40,16 @@ export function initGA4() {
 
 function sendEvent(name: string, params: Record<string, unknown>) {
   if (!GA4_ID || typeof window === "undefined" || !window.gtag) return;
-  const isLocalDebug =
-    window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1";
-
-  window.gtag("event", name, {
+  const eventParams: Record<string, unknown> = {
     ...params,
     transport_type: "beacon",
-    debug_mode: isLocalDebug,
-  });
+  };
+
+  if (import.meta.env.DEV) {
+    eventParams.debug_mode = true;
+  }
+
+  window.gtag("event", name, eventParams);
 }
 
 function normalizeLabel(value: string) {
