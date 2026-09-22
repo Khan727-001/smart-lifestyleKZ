@@ -5,7 +5,11 @@ declare global {
   }
 }
 
-const GA4_ID = (import.meta.env.VITE_GA4_MEASUREMENT_ID as string | undefined)?.trim();
+const DEFAULT_GA4_ID = "G-KR48SRW021";
+
+const GA4_ID =
+  (import.meta.env.VITE_GA4_MEASUREMENT_ID as string | undefined)?.trim() ||
+  DEFAULT_GA4_ID;
 
 export function initGA4() {
   if (!GA4_ID || typeof window === "undefined") return;
