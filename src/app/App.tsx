@@ -438,8 +438,21 @@ function formatPhone(value: string) {
   return formatted;
 }
 
+function isObviousFakePhone(value: string) {
+  const digits = value.replace(/\D/g, "");
+  const local = digits.startsWith("7") ? digits.slice(1) : digits;
+
+  if (local.length !== 10) return true;
+  if (/^(\d)\1{9}$/.test(local)) return true;
+  if (local === "1234567890" || local === "9876543210") return true;
+  if (/^(\d{2})\1{4}$/.test(local)) return true;
+  if (/^(\d{5})\1$/.test(local)) return true;
+
+  return false;
+}
+
 function isValidPhone(value: string) {
-  return /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/.test(value);
+  return /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/.test(value) && !isObviousFakePhone(value);
 }
 
 // Fallback: данные из констант если Supabase недоступен
