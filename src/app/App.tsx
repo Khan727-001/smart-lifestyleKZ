@@ -383,6 +383,12 @@ type BookingContext = {
 };
 
 const BOOKING_EVENT = "smart-lifestyle:booking";
+const PRIVACY_EVENT = "smart-lifestyle:privacy";
+const PRIVACY_VERSION = "2026-09-23";
+
+function openPrivacy() {
+  window.dispatchEvent(new CustomEvent(PRIVACY_EVENT));
+}
 
 function openBooking(context: BookingContext) {
   window.dispatchEvent(new CustomEvent<BookingContext>(BOOKING_EVENT, { detail: context }));
@@ -1462,6 +1468,151 @@ function FaqSection() {
   );
 }
 
+function ConsentCheckbox({
+  checked,
+  onChange,
+  light = false,
+}: {
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  light?: boolean;
+}) {
+  return (
+    <label className="flex items-start gap-3 cursor-pointer select-none">
+      <input
+        type="checkbox"
+        required
+        checked={checked}
+        onChange={e => onChange(e.target.checked)}
+        className="mt-0.5 h-4 w-4 shrink-0 accent-[#C9A882]"
+      />
+      <span className={`font-['DM_Sans'] text-[11px] leading-relaxed ${light ? "text-[#F3EDE6]/55" : "text-[#5C5248]/55"}`}>
+        Я ознакомился(ась) и соглашаюсь с{" "}
+        <button
+          type="button"
+          onClick={e => {
+            e.preventDefault();
+            e.stopPropagation();
+            openPrivacy();
+          }}
+          className={`underline underline-offset-2 transition-colors ${light ? "text-[#C9A882] hover:text-[#F3EDE6]" : "text-[#8A7B6C] hover:text-[#5C5248]"}`}
+        >
+          Политикой конфиденциальности
+        </button>{" "}
+        и обработкой персональных данных.
+      </span>
+    </label>
+  );
+}
+
+function PrivacyModal() {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const handleOpen = () => setOpen(true);
+    window.addEventListener(PRIVACY_EVENT, handleOpen);
+    return () => window.removeEventListener(PRIVACY_EVENT, handleOpen);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = previousOverflow; };
+  }, [open]);
+
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-[130] flex items-end lg:items-center justify-center p-0 lg:p-8" onClick={() => setOpen(false)}>
+      <div className="absolute inset-0 bg-[#40382F]/75 backdrop-blur-sm" />
+      <article
+        className="relative z-10 w-full lg:max-w-3xl max-h-[94vh] overflow-y-auto bg-[#F3EDE6] px-7 py-8 lg:px-12 lg:py-11"
+        onClick={e => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          onClick={() => setOpen(false)}
+          aria-label="Закрыть политику конфиденциальности"
+          className="absolute top-5 right-5 w-9 h-9 flex items-center justify-center text-[#5C5248]/45 hover:text-[#5C5248] transition-colors"
+        >
+          <X size={20}/>
+        </button>
+
+        <Label>Конфиденциальность</Label>
+        <h2 className="font-['Cormorant_Garamond'] text-[30px] lg:text-[42px] font-normal text-[#5C5248] leading-[1.05] pr-10">
+          Политика обработки персональных данных
+        </h2>
+        <div className="w-10 h-px bg-[#C9A882] mt-6 mb-7"/>
+
+        <div className="space-y-7 font-['DM_Sans'] text-[13px] leading-[1.75] text-[#5C5248]/70">
+          <section>
+            <p className="font-['Bebas_Neue'] text-[13px] tracking-[0.16em] uppercase text-[#8A7B6C] mb-2">1. Общие положения</p>
+            <p>
+              Настоящая политика описывает, какие данные получает сайт S.M.A.R.T. Lifestyle при отправке заявки,
+              для каких целей они используются и какие сервисы участвуют в обработке. Администратор сайта:
+              S.M.A.R.T. Lifestyle, Алматы. Контактный телефон: {SITE.phone}.
+            </p>
+          </section>
+
+          <section>
+            <p className="font-['Bebas_Neue'] text-[13px] tracking-[0.16em] uppercase text-[#8A7B6C] mb-2">2. Какие данные мы получаем</p>
+            <p>
+              Имя, номер телефона, текст обращения, выбранная услуга или блок сайта, адрес страницы, рекламные
+              параметры UTM и gclid, а также дата, время и версия согласия с настоящей политикой.
+            </p>
+          </section>
+
+          <section>
+            <p className="font-['Bebas_Neue'] text-[13px] tracking-[0.16em] uppercase text-[#8A7B6C] mb-2">3. Для чего используются данные</p>
+            <p>
+              Для связи с пользователем, обработки запроса и записи на консультацию, определения источника заявки,
+              анализа эффективности сайта и рекламы, а также улучшения работы сайта и качества коммуникации.
+            </p>
+          </section>
+
+          <section>
+            <p className="font-['Bebas_Neue'] text-[13px] tracking-[0.16em] uppercase text-[#8A7B6C] mb-2">4. Используемые сервисы</p>
+            <p>
+              Данные заявки сохраняются в Supabase. Для внутреннего уведомления о новой заявке используется Telegram.
+              Для аналитики посещений и события отправки заявки используется Google Analytics 4. Эти сервисы могут
+              обрабатывать технические данные в соответствии со своими условиями и политиками.
+            </p>
+          </section>
+
+          <section>
+            <p className="font-['Bebas_Neue'] text-[13px] tracking-[0.16em] uppercase text-[#8A7B6C] mb-2">5. Хранение и отзыв согласия</p>
+            <p>
+              Данные хранятся в объеме, необходимом для обработки обращения и связанных с ним целей. Пользователь
+              может обратиться через указанные на сайте контакты, чтобы запросить уточнение, изменение или удаление
+              предоставленных данных, а также отозвать согласие в пределах применимых требований.
+            </p>
+          </section>
+
+          <section>
+            <p className="font-['Bebas_Neue'] text-[13px] tracking-[0.16em] uppercase text-[#8A7B6C] mb-2">6. Согласие</p>
+            <p>
+              Установка отметки в форме и последующая отправка заявки означает, что пользователь ознакомился с
+              настоящей политикой и дает согласие на обработку переданных персональных данных для указанных целей.
+            </p>
+          </section>
+        </div>
+
+        <div className="mt-9 pt-6 border-t border-[#E8DDD4] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <p className="font-['DM_Sans'] text-[11px] text-[#5C5248]/40">Версия политики: {PRIVACY_VERSION}</p>
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            className="bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[14px] tracking-[0.16em] px-7 py-3.5 hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors"
+          >
+            Ознакомился(ась)
+          </button>
+        </div>
+      </article>
+    </div>
+  );
+}
+
 function BookingModal() {
   const [open, setOpen] = useState(false);
   const [context, setContext] = useState<BookingContext | null>(null);
@@ -1469,6 +1620,7 @@ function BookingModal() {
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [consent, setConsent] = useState(false);
   const leadRequestId = useRef(createLeadRequestId());
 
   useEffect(() => {
@@ -1481,6 +1633,7 @@ function BookingModal() {
       setSent(false);
       setSending(false);
       setSubmitError("");
+      setConsent(false);
       setOpen(true);
     };
 
@@ -1505,7 +1658,7 @@ function BookingModal() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (sending) return;
+    if (sending || !consent) return;
 
     setSending(true);
     setSubmitError("");
@@ -1520,6 +1673,8 @@ function BookingModal() {
         website: form.website,
         ...attribution,
         source: leadSource,
+        consentAccepted: consent,
+        consentVersion: PRIVACY_VERSION,
       });
 
       trackLeadConversion({
@@ -1629,8 +1784,12 @@ function BookingModal() {
               />
             </div>
 
-            <button type="submit" disabled={sending}
-              className="w-full bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[16px] tracking-[0.18em] py-4 hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors disabled:opacity-60 disabled:cursor-not-allowed">
+            <div className="pt-1">
+              <ConsentCheckbox checked={consent} onChange={setConsent} />
+            </div>
+
+            <button type="submit" disabled={sending || !consent}
+              className="w-full bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[16px] tracking-[0.18em] py-4 hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors disabled:opacity-45 disabled:cursor-not-allowed">
               {sending ? "Отправляем..." : "Отправить заявку"}
             </button>
 
@@ -1652,11 +1811,12 @@ function Contacts() {
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [consent, setConsent] = useState(false);
   const leadRequestId = useRef(createLeadRequestId());
 
   const handleLeadSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (sending) return;
+    if (sending || !consent) return;
 
     setSending(true);
     setSubmitError("");
@@ -1672,6 +1832,8 @@ function Contacts() {
         website: form.website,
         ...attribution,
         source: leadSource,
+        consentAccepted: consent,
+        consentVersion: PRIVACY_VERSION,
       });
 
       trackLeadConversion({
@@ -1742,10 +1904,13 @@ function Contacts() {
                   className="w-full bg-transparent border-b border-[#F3EDE6]/15 text-[#F3EDE6] placeholder-[#F3EDE6]/20 font-['DM_Sans'] text-[14px] py-3 focus:outline-none focus:border-[#C9A882]/50 transition-colors resize-none"/>
               </div>
               <div className="pt-3">
+                <div className="mb-4">
+                  <ConsentCheckbox checked={consent} onChange={setConsent} light />
+                </div>
                 <button
                   type="submit"
-                  disabled={sending}
-                  className="w-full bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[16px] tracking-[0.18em] py-4 hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                  disabled={sending || !consent}
+                  className="w-full bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[16px] tracking-[0.18em] py-4 hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors disabled:opacity-45 disabled:cursor-not-allowed"
                 >
                   {sending ? "Отправляем..." : "Отправить заявку"}
                 </button>
@@ -1788,10 +1953,14 @@ function Footer() {
           S.M.A.R.T. <span className="text-[#8A7B6C]">Lifestyle</span>
         </span>
         <p className="font-['DM_Sans'] text-[11px] text-[#F3EDE6]/25">© 2026 · {SITE.city}</p>
-        <div className="flex gap-6">
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
           {[["Метод","#method"],["Специалисты","#experts"],["FAQ","#faq"]].map(([l,h])=>(
             <a key={h} href={h} className="font-['DM_Sans'] text-[11px] tracking-[0.1em] uppercase text-[#F3EDE6]/30 hover:text-[#F3EDE6]/60 transition-colors">{l}</a>
           ))}
+          <button type="button" onClick={openPrivacy}
+            className="font-['DM_Sans'] text-[11px] tracking-[0.1em] uppercase text-[#F3EDE6]/30 hover:text-[#F3EDE6]/60 transition-colors">
+            Конфиденциальность
+          </button>
         </div>
       </div>
     </footer>
@@ -1854,6 +2023,7 @@ function LandingPage() {
       <footer><Footer/></footer>
       <ContactWidget/>
       <BookingModal/>
+      <PrivacyModal/>
     </div>
   );
 }
