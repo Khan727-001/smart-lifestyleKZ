@@ -3,6 +3,7 @@ declare global {
     dataLayer: unknown[];
     gtag?: (...args: unknown[]) => void;
     __smartLifestyleClickTracking?: boolean;
+    __smartLifestyleGA4Initialized?: boolean;
   }
 }
 
@@ -14,14 +15,19 @@ const GA4_ID =
 
 export function initGA4() {
   if (!GA4_ID || typeof window === "undefined") return;
-  if (window.gtag) return;
+  if (window.__smartLifestyleGA4Initialized) return;
+  window.__smartLifestyleGA4Initialized = true;
 
   window.dataLayer = window.dataLayer || [];
-  window.gtag = function (..._args: unknown[]) {
-    window.dataLayer.push(arguments);
-  };
+
+  if (!window.gtag) {
+    window.gtag = function (..._args: unknown[]) {
+      window.dataLayer.push(arguments);
+    };
+  }
 
   window.gtag("js", new Date());
+
   const configParams: Record<string, unknown> = {
     send_page_view: true,
   };
@@ -32,10 +38,20 @@ export function initGA4() {
 
   window.gtag("config", GA4_ID, configParams);
 
-  const script = document.createElement("script");
-  script.async = true;
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GA4_ID)}`;
-  document.head.appendChild(script);
+  const selector = `script[src*="googletagmanager.com/gtag/js?id=${GA4_ID}"]`;
+  if (!document.querySelector(selector)) {
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GA4_ID)}`;
+    document.head.appendChild(script);
+  }
+
+  if (import.meta.env.DEV) {
+    sendEvent("analytics_test", {
+      test_source: "vite_dev",
+      page_path: window.location.pathname,
+    });
+  }
 }
 
 function sendEvent(name: string, params: Record<string, unknown>) {
@@ -43,10 +59,15 @@ function sendEvent(name: string, params: Record<string, unknown>) {
   const eventParams: Record<string, unknown> = {
     ...params,
     transport_type: "beacon",
+    send_to: GA4_ID,
   };
 
   if (import.meta.env.DEV) {
     eventParams.debug_mode = true;
+  }
+
+  if (import.meta.env.DEV) {
+    console.info("[GA4]", name, eventParams);
   }
 
   window.gtag("event", name, eventParams);
