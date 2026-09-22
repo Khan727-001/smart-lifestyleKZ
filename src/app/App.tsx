@@ -374,6 +374,36 @@ const FAQ_ITEMS = [
 type ReviewItem = { name: string; specialist: string; text: string };
 type PricingDetails = { [planId: string]: string[] };
 
+type BookingContext = {
+  source: string;
+  service?: string;
+  price?: string;
+  duration?: string;
+  specialist?: string;
+};
+
+const BOOKING_EVENT = "smart-lifestyle:booking";
+
+function openBooking(context: BookingContext) {
+  window.dispatchEvent(new CustomEvent<BookingContext>(BOOKING_EVENT, { detail: context }));
+}
+
+function formatBookingSource(context: BookingContext) {
+  return [
+    context.source,
+    context.service,
+    context.price,
+    context.duration,
+    context.specialist,
+  ].filter(Boolean).join(" · ");
+}
+
+function createLeadRequestId() {
+  return typeof crypto !== "undefined" && "randomUUID" in crypto
+    ? crypto.randomUUID()
+    : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
 // Fallback: данные из констант если Supabase недоступен
 function fallbackReviews(): ReviewItem[] { return REVIEWS; }
 function fallbackPricingDetails(): PricingDetails {
@@ -741,9 +771,9 @@ function Nav() {
               <a key={h} href={h} className="font-['DM_Sans'] text-[12px] tracking-[0.12em] uppercase text-[#5C5248]/50 hover:text-[#5C5248] transition-colors">{l}</a>
             ))}
           </div>
-          <a href={WA()} target="_blank" rel="noreferrer" className="hidden lg:inline-flex items-center gap-2 bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[14px] tracking-[0.15em] px-5 py-2.5 hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors">
+          <button type="button" onClick={() => openBooking({ source: "Шапка сайта" })} className="hidden lg:inline-flex items-center gap-2 bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[14px] tracking-[0.15em] px-5 py-2.5 hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors">
             Записаться
-          </a>
+          </button>
           <button onClick={() => setOpen(!open)} className="lg:hidden relative z-[70] p-2 flex flex-col gap-[5px] justify-center">
             <span className={`block w-6 h-px transition-all duration-500 origin-center ${open ? "bg-[#F3EDE6] rotate-45 translate-y-[6px]" : "bg-[#5C5248]"}`} />
             <span className={`block h-px transition-all duration-500 ${open ? "bg-[#F3EDE6] w-0 opacity-0" : "bg-[#5C5248] w-6"}`} />
@@ -793,9 +823,9 @@ function Hero() {
           </h1>
           <div className="w-10 h-px bg-[#C9A882] mb-6" />
           <p className="font-['DM_Sans'] text-[14px] text-[#5C5248]/60 leading-relaxed mb-9">{HERO.subtext}</p>
-          <a href={WA()} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-3 bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[16px] tracking-[0.15em] px-6 py-4 hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors">
+          <button type="button" onClick={() => openBooking({ source: "Главный баннер" })} className="flex items-center justify-center gap-3 bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[16px] tracking-[0.15em] px-6 py-4 hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors">
             Записаться на консультацию <ArrowRight size={14}/>
-          </a>
+          </button>
         </div>
       </div>
 
@@ -813,9 +843,9 @@ function Hero() {
             <div className="w-12 h-px bg-[#C9A882] mb-8" />
             <p className="font-['DM_Sans'] text-[14px] text-[#5C5248]/60 leading-relaxed max-w-sm mb-12">{HERO.subtext}</p>
             <div className="flex items-center gap-8">
-              <a href={WA()} target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[16px] tracking-[0.15em] px-8 py-4 hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors">
+              <button type="button" onClick={() => openBooking({ source: "Главный баннер" })} className="inline-flex items-center gap-3 bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[16px] tracking-[0.15em] px-8 py-4 hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors">
                 Записаться <ArrowRight size={14}/>
-              </a>
+              </button>
               <a href="#problems" className="font-['DM_Sans'] text-[12px] tracking-[0.12em] uppercase text-[#5C5248]/40 hover:text-[#5C5248] transition-colors">О методе ↓</a>
             </div>
           </div>
@@ -855,10 +885,10 @@ function StatsToProblemsTransition() {
     <div className="bg-[#5C5248] py-10 px-6 lg:px-12">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <p className="font-['Cormorant_Garamond'] italic text-[#F3EDE6] leading-snug" style={{ fontSize: "clamp(20px, 2.5vw, 32px)" }}>Работаем с причинами, а не с симптомами</p>
-        <a href={WA()} target="_blank" rel="noreferrer"
+        <button type="button" onClick={() => openBooking({ source: "Блок статистики" })}
           className="inline-flex items-center gap-2 border border-[#C9A882]/40 text-[#C9A882] font-['Bebas_Neue'] text-[14px] tracking-[0.18em] px-6 py-3 hover:bg-[#C9A882] hover:text-[#5C5248] transition-colors whitespace-nowrap self-start lg:self-auto">
           Записаться <ArrowRight size={13}/>
-        </a>
+        </button>
       </div>
     </div>
   );
@@ -912,9 +942,9 @@ function Problems() {
       </div>
       <div className="w-8 h-px bg-[#C9A882] mt-6 mb-5"/>
       <p className="font-['DM_Sans'] text-[13px] text-[#5C5248]/55 leading-relaxed">Любой из этих запросов — достаточная причина, чтобы начать работу.</p>
-      <a href={WA()} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 mt-8 bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[15px] tracking-[0.15em] px-6 py-3.5 hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors">
+      <button type="button" onClick={() => openBooking({ source: "Блок запросов" })} className="inline-flex items-center gap-2 mt-8 bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[15px] tracking-[0.15em] px-6 py-3.5 hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors">
         Записаться <ArrowRight size={12}/>
-      </a>
+      </button>
     </>
   );
   return (
@@ -960,9 +990,9 @@ function Formats() {
                   <span key={fmt} className={`font-['Bebas_Neue'] text-[13px] tracking-[0.15em] px-3 py-1.5 border ${f.dark ? "border-[#C9A882]/30 text-[#C9A882]/70" : "border-[#C9A882]/40 text-[#8A7B6C]"}`}>{fmt}</span>
                 ))}
               </div>
-              <a href={WA(`Здравствуйте! Хочу записаться на ${f.title.toLowerCase()}.`)} target="_blank" rel="noreferrer" className={`inline-flex items-center gap-3 font-['Bebas_Neue'] text-[15px] tracking-[0.15em] px-7 py-4 transition-colors ${f.dark ? "border border-[#C9A882] text-[#C9A882] hover:bg-[#C9A882] hover:text-[#5C5248]" : "bg-[#C9A882] text-[#5C5248] hover:bg-[#8A7B6C] hover:text-[#F3EDE6]"}`}>
+              <button type="button" onClick={() => openBooking({ source: "Форматы", service: f.title })} className={`inline-flex items-center gap-3 font-['Bebas_Neue'] text-[15px] tracking-[0.15em] px-7 py-4 transition-colors ${f.dark ? "border border-[#C9A882] text-[#C9A882] hover:bg-[#C9A882] hover:text-[#5C5248]" : "bg-[#C9A882] text-[#5C5248] hover:bg-[#8A7B6C] hover:text-[#F3EDE6]"}`}>
                 Записаться <ArrowRight size={12}/>
-              </a>
+              </button>
             </div>
           ))}
         </div>
@@ -1051,10 +1081,10 @@ function ExpertModal({ expert, onClose }: { expert: typeof EXPERTS[0]; onClose: 
             </div>
 
             {/* Кнопка записаться — только на десктопе внутри контента */}
-            <a href={WA(`Здравствуйте! Хочу записаться к ${expert.name}.`)} target="_blank" rel="noreferrer"
+            <button type="button" onClick={() => { onClose(); openBooking({ source: "Специалисты", specialist: expert.name }); }}
               className="hidden lg:flex items-center justify-center gap-3 bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[15px] tracking-[0.18em] py-4 w-full hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors">
               Записаться <ArrowRight size={13}/>
-            </a>
+            </button>
           </div>
 
           {/* Фиксированная панель снизу — только мобиль */}
@@ -1065,10 +1095,10 @@ function ExpertModal({ expert, onClose }: { expert: typeof EXPERTS[0]; onClose: 
             >
               <X size={18}/>
             </button>
-            <a href={WA(`Здравствуйте! Хочу записаться к ${expert.name}.`)} target="_blank" rel="noreferrer"
+            <button type="button" onClick={() => { onClose(); openBooking({ source: "Специалисты", specialist: expert.name }); }}
               className="flex-1 flex items-center justify-center gap-3 bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[15px] tracking-[0.18em] hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors">
               Записаться <ArrowRight size={13}/>
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -1238,10 +1268,19 @@ function PricingModal({ item, details, priceKzt, priceUsd, onClose }: { item: ty
           </div>
         </div>
 
-        <a href={WA(`Здравствуйте! Хочу записаться: ${item.title}.`)} target="_blank" rel="noreferrer"
+        <button type="button" onClick={() => {
+            onClose();
+            openBooking({
+              source: "Стоимость",
+              service: item.title,
+              price: priceKzt,
+              duration: item.duration,
+              specialist: item.who,
+            });
+          }}
           className="flex items-center justify-center gap-3 bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[15px] tracking-[0.18em] py-4 w-full hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors">
-          Записаться в WhatsApp <ArrowRight size={14}/>
-        </a>
+          Записаться <ArrowRight size={14}/>
+        </button>
       </div>
     </div>
   );
@@ -1423,21 +1462,48 @@ function FaqSection() {
   );
 }
 
-// ══════════════════════════════════════════════════════════════
-//  CONTACTS
-// ══════════════════════════════════════════════════════════════
-function Contacts() {
+function BookingModal() {
+  const [open, setOpen] = useState(false);
+  const [context, setContext] = useState<BookingContext | null>(null);
   const [form, setForm] = useState({ name:"", phone:"", message:"", website:"" });
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [submitError, setSubmitError] = useState("");
-  const leadRequestId = useRef(
-    typeof crypto !== "undefined" && "randomUUID" in crypto
-      ? crypto.randomUUID()
-      : `${Date.now()}-${Math.random().toString(36).slice(2)}`
-  );
+  const leadRequestId = useRef(createLeadRequestId());
 
-  const handleLeadSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    const handleOpen = (event: Event) => {
+      const detail = (event as CustomEvent<BookingContext>).detail;
+      if (!detail?.source) return;
+      leadRequestId.current = createLeadRequestId();
+      setContext(detail);
+      setForm({ name:"", phone:"", message:"", website:"" });
+      setSent(false);
+      setSending(false);
+      setSubmitError("");
+      setOpen(true);
+    };
+
+    window.addEventListener(BOOKING_EVENT, handleOpen);
+    return () => window.removeEventListener(BOOKING_EVENT, handleOpen);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = previousOverflow; };
+  }, [open]);
+
+  if (!open || !context) return null;
+
+  const leadSource = formatBookingSource(context);
+  const close = () => {
+    if (sending) return;
+    setOpen(false);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (sending) return;
 
@@ -1453,11 +1519,164 @@ function Contacts() {
         message: form.message.trim() || undefined,
         website: form.website,
         ...attribution,
+        source: leadSource,
       });
 
       trackLeadConversion({
         leadId: result.leadId,
-        source: attribution.source,
+        source: leadSource,
+      });
+      setSent(true);
+    } catch (error) {
+      console.error("Lead submit failed", error);
+      setSubmitError("Не удалось отправить заявку. Попробуйте еще раз или свяжитесь с нами через WhatsApp.");
+    } finally {
+      setSending(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-end lg:items-center justify-center p-0 lg:p-8" onClick={close}>
+      <div className="absolute inset-0 bg-[#40382F]/65 backdrop-blur-sm" />
+      <div
+        className="relative z-10 bg-[#F3EDE6] w-full lg:max-w-xl max-h-[92vh] overflow-y-auto p-7 lg:p-10"
+        onClick={e => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          onClick={close}
+          aria-label="Закрыть форму"
+          className="absolute top-5 right-5 w-9 h-9 flex items-center justify-center text-[#5C5248]/50 hover:text-[#5C5248] transition-colors"
+        >
+          <X size={20}/>
+        </button>
+
+        <Label>Запись</Label>
+        <h3 className="font-['Cormorant_Garamond'] text-[30px] lg:text-[36px] font-normal text-[#5C5248] leading-tight mb-3">
+          Оставьте заявку
+        </h3>
+        <p className="font-['DM_Sans'] text-[13px] text-[#5C5248]/55 leading-relaxed mb-6">
+          Мы свяжемся с вами и уточним удобное время.
+        </p>
+
+        <div className="bg-[#E8DDD4]/70 border border-[#C9A882]/25 px-4 py-3.5 mb-7">
+          <p className="font-['Bebas_Neue'] text-[11px] tracking-[0.16em] uppercase text-[#8A7B6C] mb-1">Вы выбрали</p>
+          <p className="font-['DM_Sans'] text-[13px] text-[#5C5248] leading-relaxed">{leadSource}</p>
+        </div>
+
+        {sent ? (
+          <div className="py-8">
+            <Check size={28} className="text-[#C9A882] mb-4"/>
+            <p className="font-['Cormorant_Garamond'] text-[25px] text-[#5C5248] mb-2">Заявка отправлена</p>
+            <p className="font-['DM_Sans'] text-[13px] text-[#5C5248]/55">Свяжемся с вами в ближайшее время.</p>
+            <button type="button" onClick={close}
+              className="mt-7 w-full border border-[#C9A882]/50 text-[#5C5248] font-['Bebas_Neue'] text-[14px] tracking-[0.16em] py-3.5 hover:bg-[#E8DDD4] transition-colors">
+              Закрыть
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="absolute left-[-9999px] w-px h-px overflow-hidden" aria-hidden="true">
+              <label htmlFor="booking-website">Website</label>
+              <input
+                id="booking-website"
+                name="website"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                value={form.website}
+                onChange={e => setForm(v => ({ ...v, website: e.target.value }))}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="booking-name" className="font-['Bebas_Neue'] text-[12px] tracking-[0.16em] text-[#8A7B6C] block mb-2">Имя</label>
+              <input
+                id="booking-name"
+                type="text"
+                required
+                autoComplete="name"
+                value={form.name}
+                placeholder="Как к вам обращаться"
+                onChange={e => setForm(v => ({ ...v, name: e.target.value }))}
+                className="w-full bg-transparent border-b border-[#5C5248]/15 text-[#5C5248] placeholder-[#5C5248]/30 font-['DM_Sans'] text-[16px] py-3 focus:outline-none focus:border-[#C9A882] transition-colors"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="booking-phone" className="font-['Bebas_Neue'] text-[12px] tracking-[0.16em] text-[#8A7B6C] block mb-2">Телефон</label>
+              <input
+                id="booking-phone"
+                type="tel"
+                required
+                autoComplete="tel"
+                value={form.phone}
+                placeholder="+7 (___) ___-__-__"
+                onChange={e => setForm(v => ({ ...v, phone: e.target.value }))}
+                className="w-full bg-transparent border-b border-[#5C5248]/15 text-[#5C5248] placeholder-[#5C5248]/30 font-['DM_Sans'] text-[16px] py-3 focus:outline-none focus:border-[#C9A882] transition-colors"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="booking-message" className="font-['Bebas_Neue'] text-[12px] tracking-[0.16em] text-[#8A7B6C] block mb-2">Запрос (необязательно)</label>
+              <textarea
+                id="booking-message"
+                rows={3}
+                value={form.message}
+                placeholder="Коротко — с чем хотите разобраться..."
+                onChange={e => setForm(v => ({ ...v, message: e.target.value }))}
+                className="w-full bg-transparent border-b border-[#5C5248]/15 text-[#5C5248] placeholder-[#5C5248]/30 font-['DM_Sans'] text-[16px] py-3 focus:outline-none focus:border-[#C9A882] transition-colors resize-none"
+              />
+            </div>
+
+            <button type="submit" disabled={sending}
+              className="w-full bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[16px] tracking-[0.18em] py-4 hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors disabled:opacity-60 disabled:cursor-not-allowed">
+              {sending ? "Отправляем..." : "Отправить заявку"}
+            </button>
+
+            {submitError && (
+              <p className="font-['DM_Sans'] text-[12px] leading-relaxed text-red-700/80" role="alert">{submitError}</p>
+            )}
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════
+//  CONTACTS
+// ══════════════════════════════════════════════════════════════
+function Contacts() {
+  const [form, setForm] = useState({ name:"", phone:"", message:"", website:"" });
+  const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const leadRequestId = useRef(createLeadRequestId());
+
+  const handleLeadSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (sending) return;
+
+    setSending(true);
+    setSubmitError("");
+
+    try {
+      const attribution = getLeadAttribution();
+      const leadSource = "Контакты · форма внизу сайта";
+      const result = await submitLead({
+        requestId: leadRequestId.current,
+        name: form.name.trim(),
+        phone: form.phone.trim(),
+        message: form.message.trim() || undefined,
+        website: form.website,
+        ...attribution,
+        source: leadSource,
+      });
+
+      trackLeadConversion({
+        leadId: result.leadId,
+        source: leadSource,
       });
       setSent(true);
     } catch (error) {
@@ -1634,6 +1853,7 @@ function LandingPage() {
       </main>
       <footer><Footer/></footer>
       <ContactWidget/>
+      <BookingModal/>
     </div>
   );
 }
