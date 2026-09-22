@@ -410,6 +410,38 @@ function createLeadRequestId() {
     : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
 
+const PHONE_PREFIX = "+7 (";
+
+function formatPhone(value: string) {
+  const raw = value.trim();
+  let digits = raw.replace(/\D/g, "");
+
+  if (raw.startsWith("+7") || (digits.length >= 11 && digits.startsWith("7"))) {
+    digits = digits.slice(1);
+  } else if (digits.length >= 11 && digits.startsWith("8")) {
+    digits = digits.slice(1);
+  }
+
+  const local = digits.slice(0, 10);
+  if (!local) return PHONE_PREFIX;
+  if (local.length <= 3) return `+7 (${local}`;
+
+  const area = local.slice(0, 3);
+  const first = local.slice(3, 6);
+  const second = local.slice(6, 8);
+  const third = local.slice(8, 10);
+
+  let formatted = `+7 (${area})`;
+  if (first) formatted += ` ${first}`;
+  if (second) formatted += `-${second}`;
+  if (third) formatted += `-${third}`;
+  return formatted;
+}
+
+function isValidPhone(value: string) {
+  return /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/.test(value);
+}
+
 // Fallback: данные из констант если Supabase недоступен
 function fallbackReviews(): ReviewItem[] { return REVIEWS; }
 function fallbackPricingDetails(): PricingDetails {
@@ -1616,7 +1648,7 @@ function PrivacyModal() {
 function BookingModal() {
   const [open, setOpen] = useState(false);
   const [context, setContext] = useState<BookingContext | null>(null);
-  const [form, setForm] = useState({ name:"", phone:"", message:"", website:"" });
+  const [form, setForm] = useState({ name:"", phone:PHONE_PREFIX, message:"", website:"" });
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [submitError, setSubmitError] = useState("");
@@ -1629,7 +1661,7 @@ function BookingModal() {
       if (!detail?.source) return;
       leadRequestId.current = createLeadRequestId();
       setContext(detail);
-      setForm({ name:"", phone:"", message:"", website:"" });
+      setForm({ name:"", phone:PHONE_PREFIX, message:"", website:"" });
       setSent(false);
       setSending(false);
       setSubmitError("");
@@ -1658,7 +1690,7 @@ function BookingModal() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (sending || !consent) return;
+    if (sending || !consent || !isValidPhone(form.phone)) return;
 
     setSending(true);
     setSubmitError("");
@@ -1759,10 +1791,17 @@ function BookingModal() {
                 id="booking-phone"
                 type="tel"
                 required
+                inputMode="numeric"
                 autoComplete="tel"
                 value={form.phone}
-                placeholder="+7 (___) ___-__-__"
-                onChange={e => setForm(v => ({ ...v, phone: e.target.value }))}
+                maxLength={18}
+                pattern="^\\+7 \\(\\d{3}\\) \\d{3}-\\d{2}-\\d{2}$"
+                title="Введите номер полностью: +7 (___) ___-__-__"
+                onFocus={e => {
+                  const end = e.currentTarget.value.length;
+                  requestAnimationFrame(() => e.currentTarget.setSelectionRange(end, end));
+                }}
+                onChange={e => setForm(v => ({ ...v, phone: formatPhone(e.target.value) }))}
                 className="w-full bg-transparent border-b border-[#5C5248]/15 text-[#5C5248] placeholder-[#5C5248]/30 font-['DM_Sans'] text-[16px] py-3 focus:outline-none focus:border-[#C9A882] transition-colors"
               />
             </div>
@@ -1783,7 +1822,7 @@ function BookingModal() {
               <ConsentCheckbox checked={consent} onChange={setConsent} />
             </div>
 
-            <button type="submit" disabled={sending || !consent}
+            <button type="submit" disabled={sending || !consent || !isValidPhone(form.phone)}
               className="w-full bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[16px] tracking-[0.18em] py-4 hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors disabled:opacity-45 disabled:cursor-not-allowed">
               {sending ? "Отправляем..." : "Отправить заявку"}
             </button>
@@ -1802,7 +1841,7 @@ function BookingModal() {
 //  CONTACTS
 // ══════════════════════════════════════════════════════════════
 function Contacts() {
-  const [form, setForm] = useState({ name:"", phone:"", message:"", website:"" });
+  const [form, setForm] = useState({ name:"", phone:PHONE_PREFIX, message:"", website:"" });
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [submitError, setSubmitError] = useState("");
@@ -1811,7 +1850,7 @@ function Contacts() {
 
   const handleLeadSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (sending || !consent) return;
+    if (sending || !consent || !isValidPhone(form.phone)) return;
 
     setSending(true);
     setSubmitError("");
@@ -1882,16 +1921,39 @@ function Contacts() {
                   onChange={e => setForm(f => ({ ...f, website: e.target.value }))}
                 />
               </div>
-              {[
-                { id:"name", label:"Имя", type:"text", ph:"Как к вам обращаться", val:form.name, k:"name" },
-                { id:"phone", label:"Телефон", type:"tel", ph:"+7 (___) ___-__-__", val:form.phone, k:"phone" },
-              ].map(({ id, label, type, ph, val, k })=>(
-                <div key={id}>
-                  <label className="font-['Bebas_Neue'] text-[13px] tracking-[0.18em] text-[#C9A882]/60 block mb-2">{label}</label>
-                  <input type={type} required value={val} placeholder={ph} onChange={e => setForm(f=>({...f,[k]:e.target.value}))}
-                    className="w-full bg-transparent border-b border-[#F3EDE6]/15 text-[#F3EDE6] placeholder-[#F3EDE6]/20 font-['DM_Sans'] text-[14px] py-3 focus:outline-none focus:border-[#C9A882]/50 transition-colors"/>
-                </div>
-              ))}
+              <div>
+                <label htmlFor="contact-name" className="font-['Bebas_Neue'] text-[13px] tracking-[0.18em] text-[#C9A882]/60 block mb-2">Имя</label>
+                <input
+                  id="contact-name"
+                  type="text"
+                  required
+                  autoComplete="name"
+                  value={form.name}
+                  placeholder="Как к вам обращаться"
+                  onChange={e => setForm(v => ({ ...v, name: e.target.value }))}
+                  className="w-full bg-transparent border-b border-[#F3EDE6]/15 text-[#F3EDE6] placeholder-[#F3EDE6]/20 font-['DM_Sans'] text-[14px] py-3 focus:outline-none focus:border-[#C9A882]/50 transition-colors"
+                />
+              </div>
+              <div>
+                <label htmlFor="contact-phone" className="font-['Bebas_Neue'] text-[13px] tracking-[0.18em] text-[#C9A882]/60 block mb-2">Телефон</label>
+                <input
+                  id="contact-phone"
+                  type="tel"
+                  required
+                  inputMode="numeric"
+                  autoComplete="tel"
+                  value={form.phone}
+                  maxLength={18}
+                  pattern="^\\+7 \\(\\d{3}\\) \\d{3}-\\d{2}-\\d{2}$"
+                  title="Введите номер полностью: +7 (___) ___-__-__"
+                  onFocus={e => {
+                    const end = e.currentTarget.value.length;
+                    requestAnimationFrame(() => e.currentTarget.setSelectionRange(end, end));
+                  }}
+                  onChange={e => setForm(v => ({ ...v, phone: formatPhone(e.target.value) }))}
+                  className="w-full bg-transparent border-b border-[#F3EDE6]/15 text-[#F3EDE6] placeholder-[#F3EDE6]/20 font-['DM_Sans'] text-[14px] py-3 focus:outline-none focus:border-[#C9A882]/50 transition-colors"
+                />
+              </div>
               <div>
                 <label className="font-['Bebas_Neue'] text-[13px] tracking-[0.18em] text-[#C9A882]/60 block mb-2">Запрос (необязательно)</label>
                 <textarea rows={3} value={form.message} onChange={e => setForm(f=>({...f,message:e.target.value}))}
@@ -1904,7 +1966,7 @@ function Contacts() {
                 </div>
                 <button
                   type="submit"
-                  disabled={sending || !consent}
+                  disabled={sending || !consent || !isValidPhone(form.phone)}
                   className="w-full bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[16px] tracking-[0.18em] py-4 hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors disabled:opacity-45 disabled:cursor-not-allowed"
                 >
                   {sending ? "Отправляем..." : "Отправить заявку"}
