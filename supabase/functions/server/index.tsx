@@ -50,6 +50,18 @@ const escapeHtml = (value: string) => value
   .replaceAll(">", "&gt;")
   .replaceAll('"', "&quot;");
 
+const isObviousFakePhone = (digits: string) => {
+  const local = digits.startsWith("7") ? digits.slice(1) : digits;
+
+  if (local.length !== 10) return true;
+  if (/^(\d)\1{9}$/.test(local)) return true;
+  if (local === "1234567890" || local === "9876543210") return true;
+  if (/^(\d{2})\1{4}$/.test(local)) return true;
+  if (/^(\d{5})\1$/.test(local)) return true;
+
+  return false;
+};
+
 app.get("/server/make-server-733add02/health", (c) => c.json({ status: "ok" }));
 
 // Создание таблиц и RLS (вызвать один раз из /admin → Settings)
@@ -175,6 +187,10 @@ app.post("/server/make-server-733add02/lead", async (c) => {
 
   if (name.length < 2 || !/^7\d{10}$/.test(normalizedPhoneDigits)) {
     return c.json({ ok: false, error: "Укажите номер телефона полностью в формате +7 (___) ___-__-__" }, 400);
+  }
+
+  if (isObviousFakePhone(normalizedPhoneDigits)) {
+    return c.json({ ok: false, error: "Проверьте номер телефона: похоже, он указан некорректно" }, 400);
   }
 
   const lead = {
