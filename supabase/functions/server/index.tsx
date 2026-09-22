@@ -14,9 +14,26 @@ app.use("/*", cors({
   maxAge: 600,
 }));
 
+const getAdminKey = () => {
+  const secretKeys = Deno.env.get("SUPABASE_SECRET_KEYS");
+  if (secretKeys) {
+    try {
+      const parsed = JSON.parse(secretKeys);
+      if (typeof parsed?.default === "string" && parsed.default) return parsed.default;
+    } catch (error) {
+      console.error("Failed to parse SUPABASE_SECRET_KEYS", error);
+    }
+  }
+
+  const legacyServiceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (legacyServiceRoleKey) return legacyServiceRoleKey;
+
+  throw new Error("Supabase admin key is not available");
+};
+
 const adminClient = () => createClient(
   Deno.env.get("SUPABASE_URL")!,
-  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+  getAdminKey(),
 );
 
 const cleanText = (value: unknown, maxLength = 500) =>
@@ -33,10 +50,10 @@ const escapeHtml = (value: string) => value
   .replaceAll(">", "&gt;")
   .replaceAll('"', "&quot;");
 
-app.get("/make-server-733add02/health", (c) => c.json({ status: "ok" }));
+app.get("/server/make-server-733add02/health", (c) => c.json({ status: "ok" }));
 
 // Создание таблиц и RLS (вызвать один раз из /admin → Settings)
-app.post("/make-server-733add02/init-db", async (c) => {
+app.post("/server/make-server-733add02/init-db", async (c) => {
   const supabase = adminClient();
   const sql = `
     create table if not exists public.reviews (
@@ -122,7 +139,7 @@ app.post("/make-server-733add02/init-db", async (c) => {
   return c.json({ ok: true });
 });
 
-app.post("/make-server-733add02/lead", async (c) => {
+app.post("/server/make-server-733add02/lead", async (c) => {
   let body: Record<string, unknown>;
   try {
     body = await c.req.json();
