@@ -89,12 +89,18 @@ app.post("/server/make-server-733add02/init-db", async (c) => {
       utm_content text,
       utm_term text,
       gclid text,
+      consent_accepted boolean not null default false,
+      consent_version text,
+      consent_at timestamptz,
       telegram_sent boolean not null default false,
       telegram_message_id bigint,
       created_at timestamptz not null default now()
     );
 
     alter table public.leads add column if not exists request_id text;
+    alter table public.leads add column if not exists consent_accepted boolean not null default false;
+    alter table public.leads add column if not exists consent_version text;
+    alter table public.leads add column if not exists consent_at timestamptz;
     create unique index if not exists leads_request_id_uidx on public.leads (request_id) where request_id is not null;
 
     alter table public.reviews enable row level security;
@@ -156,7 +162,13 @@ app.post("/server/make-server-733add02/lead", async (c) => {
   const name = cleanText(body.name, 120);
   const phone = cleanText(body.phone, 60);
   const message = optionalText(body.message, 1500);
+  const consentAccepted = body.consentAccepted === true;
+  const consentVersion = cleanText(body.consentVersion, 80);
   const phoneDigits = phone.replace(/\D/g, "");
+
+  if (!consentAccepted || !consentVersion) {
+    return c.json({ ok: false, error: "Необходимо согласие с политикой конфиденциальности" }, 400);
+  }
 
   if (name.length < 2 || phoneDigits.length < 7) {
     return c.json({ ok: false, error: "Укажите имя и корректный телефон" }, 400);
@@ -167,7 +179,7 @@ app.post("/server/make-server-733add02/lead", async (c) => {
     name,
     phone,
     message,
-    source: cleanText(body.source, 120) || "website",
+    source: cleanText(body.source, 500) || "website",
     page_url: optionalText(body.pageUrl, 1000),
     utm_source: optionalText(body.utmSource, 255),
     utm_medium: optionalText(body.utmMedium, 255),
@@ -175,6 +187,9 @@ app.post("/server/make-server-733add02/lead", async (c) => {
     utm_content: optionalText(body.utmContent, 255),
     utm_term: optionalText(body.utmTerm, 255),
     gclid: optionalText(body.gclid, 500),
+    consent_accepted: true,
+    consent_version: consentVersion,
+    consent_at: new Date().toISOString(),
   };
 
   const supabase = adminClient();
@@ -243,6 +258,7 @@ app.post("/server/make-server-733add02/lead", async (c) => {
     `🌐 <b>Источник:</b> ${escapeHtml(lead.source)}`,
     lead.page_url ? `📍 <b>Страница:</b> ${escapeHtml(lead.page_url)}` : null,
     attribution ? `📊 <b>Реклама:</b>\n${attribution}` : null,
+    `🔐 <b>Согласие:</b> получено · ${escapeHtml(consentVersion)}`,
     `🕐 <b>Время:</b> ${escapeHtml(createdAt)} (Алматы)`,
     `🆔 <b>Lead ID:</b> <code>${escapeHtml(savedLead.id)}</code>`,
   ].filter(Boolean).join("\n");
