@@ -165,13 +165,16 @@ app.post("/server/make-server-733add02/lead", async (c) => {
   const consentAccepted = body.consentAccepted === true;
   const consentVersion = cleanText(body.consentVersion, 80);
   const phoneDigits = phone.replace(/\D/g, "");
+  const normalizedPhoneDigits = phoneDigits.startsWith("8")
+    ? "7" + phoneDigits.slice(1)
+    : phoneDigits;
 
   if (!consentAccepted || !consentVersion) {
     return c.json({ ok: false, error: "Необходимо согласие с политикой конфиденциальности" }, 400);
   }
 
-  if (name.length < 2 || phoneDigits.length < 7) {
-    return c.json({ ok: false, error: "Укажите имя и корректный телефон" }, 400);
+  if (name.length < 2 || !/^7\d{10}$/.test(normalizedPhoneDigits)) {
+    return c.json({ ok: false, error: "Укажите номер телефона полностью в формате +7 (___) ___-__-__" }, 400);
   }
 
   const lead = {
