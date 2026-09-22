@@ -1796,6 +1796,9 @@ function BookingModal() {
                 onChange={e => setForm(v => ({ ...v, name: e.target.value }))}
                 className="w-full bg-transparent border-b border-[#5C5248]/15 text-[#5C5248] placeholder-[#5C5248]/30 font-['DM_Sans'] text-[16px] py-3 focus:outline-none focus:border-[#C9A882] transition-colors"
               />
+              {form.phone.length === 18 && isObviousFakePhone(form.phone) && (
+                <p className="font-['DM_Sans'] text-[11px] text-red-700/70 mt-2">Проверьте номер телефона</p>
+              )}
             </div>
 
             <div>
@@ -1946,6 +1949,9 @@ function Contacts() {
                   onChange={e => setForm(v => ({ ...v, name: e.target.value }))}
                   className="w-full bg-transparent border-b border-[#F3EDE6]/15 text-[#F3EDE6] placeholder-[#F3EDE6]/20 font-['DM_Sans'] text-[14px] py-3 focus:outline-none focus:border-[#C9A882]/50 transition-colors"
                 />
+                {form.phone.length === 18 && isObviousFakePhone(form.phone) && (
+                  <p className="font-['DM_Sans'] text-[11px] text-red-300/80 mt-2">Проверьте номер телефона</p>
+                )}
               </div>
               <div>
                 <label htmlFor="contact-phone" className="font-['Bebas_Neue'] text-[13px] tracking-[0.18em] text-[#C9A882]/60 block mb-2">Телефон</label>
