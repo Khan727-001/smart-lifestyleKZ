@@ -22,8 +22,13 @@ export function initGA4() {
   };
 
   window.gtag("js", new Date());
+  const isLocalDebug =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1";
+
   window.gtag("config", GA4_ID, {
     send_page_view: true,
+    debug_mode: isLocalDebug,
   });
 
   const script = document.createElement("script");
@@ -34,9 +39,14 @@ export function initGA4() {
 
 function sendEvent(name: string, params: Record<string, unknown>) {
   if (!GA4_ID || typeof window === "undefined" || !window.gtag) return;
+  const isLocalDebug =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1";
+
   window.gtag("event", name, {
     ...params,
     transport_type: "beacon",
+    debug_mode: isLocalDebug,
   });
 }
 
