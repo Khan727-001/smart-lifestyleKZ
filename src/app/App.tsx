@@ -444,6 +444,7 @@ function isObviousFakePhone(value: string) {
 
   if (local.length !== 10) return true;
   if (/^(\d)\1{9}$/.test(local)) return true;
+  if (/(\d)\1{6,}/.test(local)) return true;
   if (local === "1234567890" || local === "9876543210") return true;
   if (/^(\d{2})\1{4}$/.test(local)) return true;
   if (/^(\d{5})\1$/.test(local)) return true;
