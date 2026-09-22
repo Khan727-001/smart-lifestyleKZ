@@ -13,6 +13,8 @@ export type LeadPayload = {
   utmContent?: string;
   utmTerm?: string;
   gclid?: string;
+  consentAccepted: boolean;
+  consentVersion: string;
   website?: string; // honeypot: must stay empty
 };
 
