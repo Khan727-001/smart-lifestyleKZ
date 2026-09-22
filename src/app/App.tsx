@@ -1154,10 +1154,10 @@ function Experts() {
                   >
                     О специалисте
                   </button>
-                  <a href={WA(`Здравствуйте! Хочу записаться к ${e.name}.`)} target="_blank" rel="noreferrer"
+                  <button type="button" onClick={() => openBooking({ source: "Специалисты", specialist: e.name })}
                     className="inline-flex items-center gap-2 bg-[#C9A882] text-[#5C5248] font-['Bebas_Neue'] text-[14px] tracking-[0.15em] px-6 py-3.5 hover:bg-[#8A7B6C] hover:text-[#F3EDE6] transition-colors">
                     Записаться <ArrowRight size={12}/>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
