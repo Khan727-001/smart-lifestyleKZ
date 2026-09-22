@@ -1,0 +1,5 @@
+project_id = "yexyyvttcazqmqhzjrcd"
+
+[functions.server]
+verify_jwt = true
+entrypoint = "./functions/server/index.tsx"
