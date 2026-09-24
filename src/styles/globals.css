@@ -2,7 +2,7 @@
 
 /* Курсор — скрываем стандартный на десктопе, показываем кастомный */
 @media (min-width: 1024px) {
-  * { cursor: none !important; }
+  body:not([data-admin]) * { cursor: none !important; }
 }
 @media (max-width: 1023px) {
   * { cursor: default; }
