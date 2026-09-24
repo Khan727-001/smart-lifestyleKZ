@@ -1757,14 +1757,14 @@ function BookingModal() {
           Оставьте заявку
         </h3>
         <p className="font-['DM_Sans'] text-[13px] text-[#5C5248]/55 leading-relaxed mb-6">
-          Мы свяжемся с вами и уточним удобное время.
+          Оставьте номер WhatsApp. Мы свяжемся с вами и уточним удобное время.
         </p>
 
         {sent ? (
           <div className="py-8">
             <Check size={28} className="text-[#C9A882] mb-4"/>
             <p className="font-['Cormorant_Garamond'] text-[25px] text-[#5C5248] mb-2">Заявка отправлена</p>
-            <p className="font-['DM_Sans'] text-[13px] text-[#5C5248]/55">Свяжемся с вами в ближайшее время.</p>
+            <p className="font-['DM_Sans'] text-[13px] text-[#5C5248]/55">Свяжемся с вами в WhatsApp в ближайшее время.</p>
             <button type="button" onClick={close}
               className="mt-7 w-full border border-[#C9A882]/50 text-[#5C5248] font-['Bebas_Neue'] text-[14px] tracking-[0.16em] py-3.5 hover:bg-[#E8DDD4] transition-colors">
               Закрыть
@@ -1803,7 +1803,7 @@ function BookingModal() {
             </div>
 
             <div>
-              <label htmlFor="booking-phone" className="font-['Bebas_Neue'] text-[12px] tracking-[0.16em] text-[#8A7B6C] block mb-2">Телефон</label>
+              <label htmlFor="booking-phone" className="font-['Bebas_Neue'] text-[12px] tracking-[0.16em] text-[#8A7B6C] block mb-2">Телефон / WhatsApp</label>
               <input
                 id="booking-phone"
                 type="tel"
@@ -1920,7 +1920,7 @@ function Contacts() {
             <div className="py-10 border-t border-[#F3EDE6]/10">
               <Check size={28} className="text-[#C9A882] mb-5"/>
               <p className="font-['Cormorant_Garamond'] text-[24px] font-normal text-[#F3EDE6] mb-3">Заявка отправлена</p>
-              <p className="font-['DM_Sans'] text-[13px] text-[#F3EDE6]/50">Свяжемся с вами в ближайшее время.</p>
+              <p className="font-['DM_Sans'] text-[13px] text-[#F3EDE6]/50">Свяжемся с вами в WhatsApp в ближайшее время.</p>
             </div>
           ) : (
             <form onSubmit={handleLeadSubmit} className="space-y-5">
@@ -1953,7 +1953,7 @@ function Contacts() {
                 )}
               </div>
               <div>
-                <label htmlFor="contact-phone" className="font-['Bebas_Neue'] text-[13px] tracking-[0.18em] text-[#C9A882]/60 block mb-2">Телефон</label>
+                <label htmlFor="contact-phone" className="font-['Bebas_Neue'] text-[13px] tracking-[0.18em] text-[#C9A882]/60 block mb-2">Телефон / WhatsApp</label>
                 <input
                   id="contact-phone"
                   type="tel"
