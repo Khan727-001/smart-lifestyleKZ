@@ -1793,6 +1793,7 @@ function BookingModal() {
                 required
                 autoComplete="name"
                 value={form.name}
+                placeholder="Ваше имя"
                 onChange={e => setForm(v => ({ ...v, name: e.target.value }))}
                 className="w-full bg-transparent border-b border-[#5C5248]/15 text-[#5C5248] placeholder-[#5C5248]/30 font-['DM_Sans'] text-[16px] py-3 focus:outline-none focus:border-[#C9A882] transition-colors"
               />
@@ -1943,6 +1944,7 @@ function Contacts() {
                   required
                   autoComplete="name"
                   value={form.name}
+                placeholder="Ваше имя"
                   onChange={e => setForm(v => ({ ...v, name: e.target.value }))}
                   className="w-full bg-transparent border-b border-[#F3EDE6]/15 text-[#F3EDE6] placeholder-[#F3EDE6]/20 font-['DM_Sans'] text-[14px] py-3 focus:outline-none focus:border-[#C9A882]/50 transition-colors"
                 />
