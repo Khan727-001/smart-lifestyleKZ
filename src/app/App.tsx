@@ -987,7 +987,7 @@ function Problems() {
   const heading = (
     <>
       <div className="relative">
-        <GhostNum n="01" />
+        <GhostNum n="05" />
         <h2 className="font-['Cormorant_Garamond'] font-normal text-[#5C5248] leading-[1.1] relative" style={{ fontSize:"clamp(32px,4vw,52px)" }}>
           Ваш запрос —<br/><em>отправная точка</em>
         </h2>
@@ -1368,7 +1368,7 @@ function Pricing() {
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <FadeIn className="mb-14 lg:mb-20">
           <div className="relative">
-            <GhostNum n="05" />
+            <GhostNum n="01" />
             <h2 className="font-['Cormorant_Garamond'] font-normal text-[#5C5248] leading-[1.05] relative" style={{ fontSize:"clamp(32px,4vw,52px)" }}>Стоимость</h2>
           </div>
         </FadeIn>
@@ -2084,11 +2084,11 @@ function LandingPage() {
         <Statement/>
         <Stats/>
         <StatsToProblemsTransition/>
-        <Problems/>
+        <Pricing/>
         <Formats/>
         <Experts/>
         <Reviews/>
-        <Pricing/>
+        <Problems/>
         <Method/>
         <FaqSection/>
         <Contacts/>
